@@ -1,0 +1,61 @@
+import styled from "styled-components/native";
+
+import { Feather } from '@expo/vector-icons';
+import { RFValue } from "react-native-responsive-fontsize";
+
+interface Props{
+   type: 'up' | 'down' | 'total'; 
+}
+
+export const Container = styled.View<Props>`
+   background-color: ${(props) => props.type === 'total' ? props.theme.colors.secondary : props.theme.colors.shape};
+
+   width: ${RFValue(300)}px;
+   border-radius: 5px;
+   padding: 19px 23px ${RFValue(42)}px;
+
+   margin-right: 16px;
+`;
+
+export const Header = styled.View`
+   flex-direction: row;
+   justify-content: space-between;
+`;
+
+export const Title = styled.Text<Props>`
+   font-family: ${({ theme }) => theme.fonts.regular};
+   font-size: ${RFValue(14)}px;
+   color: ${(props) => props.type === 'total' ? props.theme.colors.shape : props.theme.colors.text_dark};
+`;
+
+export const Icon = styled(Feather)<Props>`
+   font-size: ${RFValue(40)}px;
+   color: ${props => {
+      switch(props.type){
+         case 'up':
+            return props.theme.colors.success;
+         case 'down':
+            return props.theme.colors.attention;
+         case 'total':
+            return props.theme.colors.shape;
+         default: 
+            return props.theme.colors.text_dark; 
+      }
+   }};
+`;
+
+export const Footer = styled.View``;
+
+export const Amount = styled.Text<Props>`
+   font-family: ${({ theme }) => theme.fonts.medium};
+   font-size: ${RFValue(32)}px;
+   color: ${(props) => props.type === 'total' ? props.theme.colors.shape : props.theme.colors.text_dark};
+
+   margin-top: 38px;
+`;
+
+export const LastTransaction = styled.Text<Props>`
+   font-family: ${({ theme }) => theme.fonts.regular};
+   font-size: ${RFValue(12)}px;
+   color: ${(props) => props.type === 'total' ? props.theme.colors.shape : props.theme.colors.text};
+`;
