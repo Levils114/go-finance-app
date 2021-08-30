@@ -1,4 +1,5 @@
 import React from 'react';
+import { TranscationCardProps } from '../../@types/transactionCardProps';
 import {Container,
         Title,
         Amount,
@@ -8,20 +9,26 @@ import {Container,
         CategoryName,
         Date} from './styles';
 
-export default function TransactionCard(){
+interface Props{
+   data: TranscationCardProps;
+}
+
+export default function TransactionCard(props: Props){
    return(
       <Container>
-         <Title>Desenvolvimento de site</Title>
+         <Title>{props.data.title}</Title>
 
-         <Amount>R$ 12.5</Amount>
+         <Amount type={props.data.type}>
+            {props.data.type === 'positive' ? props.data.amount : '- ' + props.data.amount}
+         </Amount>
 
          <Footer>
             <Category>
-               <Icon name="dollar-sign"/>
-               <CategoryName>Vendas</CategoryName>
+               <Icon name={props.data.category.icon}/>
+               <CategoryName>{props.data.category.name}</CategoryName>
             </Category>
 
-            <Date>12/12/2021</Date>
+            <Date>{props.data.date}</Date>
          </Footer>
       </Container>
    );

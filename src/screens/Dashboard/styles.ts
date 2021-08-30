@@ -1,7 +1,9 @@
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { FlatList } from "react-native";
+import { TranscationCardProps } from "../../@types/transactionCardProps";
 
 export const Container = styled.View`
     flex: 1;
@@ -89,4 +91,12 @@ export const Title = styled.Text`
     font-family: ${props => props.theme.fonts.regular};
 
     margin-bottom: 16px;
+`;
+
+export const TransactionsList = styled(FlatList as new () => FlatList<TranscationCardProps>).attrs({
+    showsVerticalScrollIndicator: false,
+    contentContainerStyle: {
+        paddingBottom: getBottomSpace()
+    }
+})`
 `;
