@@ -1,5 +1,6 @@
 import React from "react";
 import HighLightCard from "../../components/HighlightCard";
+import TransactionCard from "../../components/TransactionCard";
 
 import {Container,
         Header,
@@ -11,7 +12,9 @@ import {Container,
         User,
         UserGreeting,
         UserName,
-        HighLightCards} from "./styles";
+        HighLightCards,
+        Transactions,
+        Title} from "./styles";
 
 export default function Dashboard(){
     return(
@@ -53,6 +56,12 @@ export default function Dashboard(){
                     type="total"
                 />
             </HighLightCards>
+        
+            <Transactions>
+                <Title>Listagem</Title>
+
+                <TransactionCard />
+            </Transactions>
         </Container>
     );
 }
