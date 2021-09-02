@@ -42,3 +42,11 @@ export const TransactionsTypes = styled.View`
 
    margin: 8px 0 16px;
 `;
+
+export const Error = styled.Text`
+   color: ${props => props.theme.colors.attention};
+   font-family: ${props => props.theme.fonts.regular};
+   font-size: ${RFValue(12)}px;
+
+   margin: 7px;
+`;
