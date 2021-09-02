@@ -20,7 +20,7 @@ export default function App() {
 
   return fontsLoaded ? (
     <ThemeProvider theme={theme}>
-      <CategorySelect />
+      <Register />
     </ThemeProvider>
   ) : <AppLoading />
 }

@@ -4,7 +4,13 @@ import styled from "styled-components/native";
 import { Feather } from '@expo/vector-icons';
 import { getBottomSpace } from "react-native-iphone-x-helper";
 
-export const Container = styled.View`
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+interface Props{
+   isActive: boolean;
+}
+
+export const Container = styled(GestureHandlerRootView)`
    flex: 1;
    background-color: ${props => props.theme.colors.background};
 `;
@@ -24,11 +30,13 @@ export const Title = styled.Text`
    color: ${props => props.theme.colors.shape};
 `;
 
-export const Category = styled.TouchableOpacity`
+export const Category = styled.TouchableOpacity<Props>`
    width: 100%;
    padding: ${RFValue(15)}px;
    flex-direction: row;
    align-items: center;
+
+   background-color: ${props => props.isActive ? props.theme.colors.secondary_light : props.theme.colors.background};
 `;
 
 export const Icon = styled(Feather)`

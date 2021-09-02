@@ -37,7 +37,7 @@ export default function CategorySelect(props: CategorySelectProps){
             }}
             keyExtractor={item => item.key}
             renderItem={({ item }) => (
-               <Category>
+               <Category onPress={() => props.setCategory(item)} isActive={props.category === item}>
                   <Icon name={item.icon} />
                   <Name>{item.name}</Name>
                </Category>
@@ -46,7 +46,7 @@ export default function CategorySelect(props: CategorySelectProps){
          />
 
          <Footer>
-            <Button title="Selecionar"/>
+            <Button title="Selecionar" onPress={props.closeSelectCategory}/>
          </Footer>
       </Container>
    );
