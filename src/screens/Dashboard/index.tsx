@@ -77,7 +77,7 @@ export default function Dashboard(){
                         </User>
                     </UserInfo>
 
-                    <LogOutButton>
+                    <LogOutButton onPress={() => {}}>
                         <LogOutIcon name="power"/>
                     </LogOutButton>
                 </UserWrapper>

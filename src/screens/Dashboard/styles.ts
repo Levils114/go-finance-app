@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { FlatList } from "react-native";
 import { TranscationCardProps } from "../../@types/transactionCardProps";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
     flex: 1;
@@ -36,7 +37,7 @@ export const UserInfo = styled.View`
     align-items: center;
 `;
 
-export const LogOutButton = styled.TouchableOpacity``;
+export const LogOutButton = styled(BorderlessButton)``;
 
 export const LogOutIcon = styled(Feather)`
     font-size: ${RFValue(24)}px;
