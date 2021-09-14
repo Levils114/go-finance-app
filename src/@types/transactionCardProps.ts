@@ -1,11 +1,8 @@
 export interface TranscationCardProps{
    id: number;
-   title: string;
+   name: string;
    amount: string;
-   category: {
-      icon: string;
-      name: string;
-   };
+   category: string;
    date: string;
-   type: 'positive' | 'negative';
+   type: 'up' | 'down';
 }

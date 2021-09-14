@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TranscationCardProps } from '../../@types/transactionCardProps';
+import { categories } from '../../utils/categories';
 import {Container,
         Title,
         Amount,
@@ -7,28 +8,44 @@ import {Container,
         Category,
         Icon,
         CategoryName,
-        Date} from './styles';
+        DateText} from './styles';
 
 interface Props{
    data: TranscationCardProps;
 }
 
 export default function TransactionCard(props: Props){
+   const amount = useMemo(() => {
+      return Number(props.data.amount).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+   }, []);
+
+   const date = useMemo(() => {
+      return new Date(props.data.date).toLocaleDateString('pt-BR', {
+         day: '2-digit',
+         month: '2-digit',
+         year: '2-digit'
+      });
+   }, []);
+
+   const category = useMemo(() => {
+      return categories.find(category => category.key === props.data.category);
+   }, []);
+
    return(
       <Container>
-         <Title>{props.data.title}</Title>
+         <Title>{props.data.name}</Title>
 
          <Amount type={props.data.type}>
-            {props.data.type === 'positive' ? props.data.amount : '- ' + props.data.amount}
+            {props.data.type === 'up' ? amount : '- ' + amount}
          </Amount>
 
          <Footer>
             <Category>
-               <Icon name={props.data.category.icon}/>
-               <CategoryName>{props.data.category.name}</CategoryName>
+               <Icon name={category!.icon}/>
+               <CategoryName>{category!.name}</CategoryName>
             </Category>
 
-            <Date>{props.data.date}</Date>
+            <DateText>{date}</DateText>
          </Footer>
       </Container>
    );

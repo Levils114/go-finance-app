@@ -1,4 +1,5 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
 import { TranscationCardProps } from "../../@types/transactionCardProps";
 import HighLightCard from "../../components/HighlightCard";
 import TransactionCard from "../../components/TransactionCard";
@@ -19,50 +20,18 @@ import {Container,
         TransactionsList} from "./styles";
 
 export default function Dashboard(){
-    const data: TranscationCardProps[] = [{
-        id: 1,
-        title: "teste",
-        amount: "R$ 12,50",
-        category: {
-            icon: 'dollar-sign',
-            name: 'Vendas'
-        },
-        date: "12/12/2021",
-        type: 'positive'
-    },
-    {
-        id: 2,
-        title: "teste2",
-        amount: "R$ 12,50",
-        category: {
-            icon: 'coffee',
-            name: 'Alimentação'
-        },
-        date: "12/12/2021",
-        type: 'negative'
-    },
-    {
-        id: 3,
-        title: "teste3",
-        amount: "R$ 12,50",
-        category: {
-            icon: 'dollar-sign',
-            name: 'Vendas'
-        },
-        date: "12/12/2021",
-        type: 'negative'
-    },
-    {
-        id: 4,
-        title: "teste4",
-        amount: "R$ 12,50",
-        category: {
-            icon: 'dollar-sign',
-            name: 'Vendas'
-        },
-        date: "12/12/2021",
-        type: 'positive'
-    }]
+    const [transactions, setTransactions] = useState<TranscationCardProps[]>([]);
+
+    async function loadTransactions(){
+        const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
+        const currentTransactions = transactions ? JSON.parse(transactions) : [];
+
+        setTransactions(currentTransactions);
+    }
+
+    useEffect(() => {
+        loadTransactions();
+    }, []);
 
     return(
         <Container>
@@ -108,7 +77,7 @@ export default function Dashboard(){
                 <Title>Listagem</Title>
 
                 <TransactionsList 
-                    data={data}
+                    data={transactions}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <TransactionCard data={item}/>
