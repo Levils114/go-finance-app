@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+
 import { useForm } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/core';
+
 import { Alert, Keyboard, Modal, TouchableWithoutFeedback } from 'react-native';
 
 import Button from '../../components/Forms/Button';
@@ -20,6 +23,9 @@ import {Container,
         TransactionsTypes,
         Error} from './styles';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
+
 interface FormData{
    name: string;
    amount: string;
@@ -36,7 +42,9 @@ const schema = Yup.object().shape({
 });
 
 export default function Register(){
-   const { control, handleSubmit, formState: { errors } } = useForm({
+   const navigation = useNavigation();
+
+   const { control, handleSubmit, reset, formState: { errors } } = useForm({
       resolver: yupResolver(schema),
    });
 
@@ -54,12 +62,31 @@ export default function Register(){
       }
 
       const data = {
+         id: uuid.v4().toString(),
          ...form,
          trasactionTypeSelected,
          category: category.key,
+         date: new Date(),
       }
-   
-      console.log(data);
+
+      try{
+         const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
+         const formatTransactions = transactions ? JSON.parse(transactions) : [];
+
+         await AsyncStorage.setItem('@GoFinance:transactions', JSON.stringify([...formatTransactions, data]));
+
+         reset();
+         setTransactionTypeSelected('');
+         setCategory({
+            key: 'category',
+            name: 'Categoria',
+         });
+
+         navigation.navigate('Listagem' as never);
+      } catch(err){
+         console.log(err);
+         Alert.alert('Não foi possível salvar');
+      }
    }
 
    return(
