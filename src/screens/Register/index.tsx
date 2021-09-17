@@ -64,7 +64,7 @@ export default function Register(){
       const data = {
          id: uuid.v4().toString(),
          ...form,
-         trasactionTypeSelected,
+         type: trasactionTypeSelected,
          category: category.key,
          date: new Date(),
       }

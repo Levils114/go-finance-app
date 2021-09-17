@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import { TranscationCardProps } from "../../@types/transactionCardProps";
 import HighLightCard from "../../components/HighlightCard";
@@ -22,16 +23,43 @@ import {Container,
 export default function Dashboard(){
     const [transactions, setTransactions] = useState<TranscationCardProps[]>([]);
 
+    const entriesSum = React.useMemo(() => {
+        const getEntries = transactions.filter(transaction => transaction.type === 'up');
+        const getAmounts = getEntries.map(entry => entry.amount);
+        const sumEntries = getAmounts.length === 1 ? getAmounts[0] : getAmounts.reduce((a, b) => a + b);
+
+        return sumEntries.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        });
+    }, [transactions]);
+
+    const exitsSum = React.useMemo(() => {
+        const getExits = transactions.filter(transaction => transaction.type === 'down');
+        const getAmounts = getExits.map(entry => entry.amount);
+        const sumExits = getAmounts.length === 1 ? getAmounts[0] : getAmounts.reduce((a, b) => a + b);
+
+        return sumExits.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        });
+    }, [transactions]);
+    
+
     async function loadTransactions(){
         const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
         const currentTransactions = transactions ? JSON.parse(transactions) : [];
 
         setTransactions(currentTransactions);
-    }
+    };
 
     useEffect(() => {
         loadTransactions();
     }, []);
+
+    useFocusEffect(React.useCallback(() => {
+        loadTransactions();
+    }, []));
 
     return(
         <Container>
@@ -55,13 +83,13 @@ export default function Dashboard(){
             <HighLightCards>
                 <HighLightCard 
                     title="Entradas"
-                    amount="R$ 17.400,00"
+                    amount={`${entriesSum}`}
                     lastTransaction="Última entrada dia 6 de março"
                     type="up"
                 />
                 <HighLightCard 
                     title="Saídas"
-                    amount="R$ 1.259,00"
+                    amount={`${exitsSum}`}
                     lastTransaction="Última saída dia 6 de março"
                     type="down"
                 />

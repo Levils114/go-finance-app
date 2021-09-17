@@ -1,7 +1,7 @@
 export interface TranscationCardProps{
    id: number;
    name: string;
-   amount: string;
+   amount: number;
    category: string;
    date: string;
    type: 'up' | 'down';
