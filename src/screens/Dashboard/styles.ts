@@ -101,3 +101,9 @@ export const TransactionsList = styled(FlatList as new () => FlatList<Transcatio
     }
 })`
 `;
+
+export const LoadingContainer = styled.View`
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+`;
