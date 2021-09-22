@@ -6,6 +6,10 @@ import { FlatList } from "react-native";
 import { TranscationCardProps } from "../../@types/transactionCardProps";
 import { BorderlessButton } from "react-native-gesture-handler";
 
+interface Props{
+    highlightCardsHeight: number;
+}
+
 export const Container = styled.View`
     flex: 1;
     background-color: ${({ theme }) => theme.colors.background};
@@ -81,10 +85,10 @@ export const HighLightCards = styled.ScrollView.attrs({
     margin-top: ${RFPercentage(20)}px;
 `;
 
-export const Transactions = styled.View`
+export const Transactions = styled.View<Props>`
     flex: 1;
     padding: 0 24px;
-    margin-top: ${RFPercentage(12)}px;
+    margin-top: ${props => props.highlightCardsHeight - 260 + RFPercentage(12)}px;
 `;
 
 export const Title = styled.Text`

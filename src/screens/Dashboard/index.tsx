@@ -29,6 +29,8 @@ export default function Dashboard(){
     const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
     const [transactions, setTransactions] = useState<TranscationCardProps[]>([]);
 
+    const [highlightCardsHeight, setHighlightCardsHeight] = useState(0);
+
     const entriesSum = React.useMemo(() => {
         const getEntries = transactions.filter(transaction => transaction.type === 'up');
         const getAmounts = getEntries.map(entry => entry.amount);
@@ -71,7 +73,6 @@ export default function Dashboard(){
         }
     }, [transactions]);
     
-
     async function loadTransactions(){
         try{
             const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
@@ -86,13 +87,13 @@ export default function Dashboard(){
         }
     };
 
-    useEffect(() => {
-        loadTransactions();
-    }, []);
-
     useFocusEffect(React.useCallback(() => {
         loadTransactions();
     }, []));
+
+    function getHighlightCardsHeight(height: number){
+        setHighlightCardsHeight(height);
+    }
 
     return(
         isLoadingTransactions ? (
@@ -124,6 +125,7 @@ export default function Dashboard(){
                     amount={entriesSum.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     lastTransaction={entriesSum.lastTransactionDate ? `Última entrada dia ${entriesSum.lastTransactionDate}` : ''}
                     type="up"
+                    getHighlightCardHeight={getHighlightCardsHeight}
                 />
                 <HighLightCard 
                     title="Saídas"
@@ -139,7 +141,7 @@ export default function Dashboard(){
                 />
             </HighLightCards>
         
-            <Transactions>
+            <Transactions highlightCardsHeight={highlightCardsHeight}>
                 <Title>Listagem</Title>
 
                 <TransactionsList 

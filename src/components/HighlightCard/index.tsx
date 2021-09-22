@@ -12,6 +12,7 @@ interface HighLightCardProps{
    amount: string;
    lastTransaction: string;
    type: 'up' | 'down' | 'total';
+   getHighlightCardHeight?: (height: number) => void;
 }
 
 export default function HighLightCard(props: HighLightCardProps){
@@ -24,7 +25,11 @@ export default function HighLightCard(props: HighLightCardProps){
    }, [props.type]);
 
    return(
-      <Container type={props.type}>
+      <Container type={props.type} onLayout={onLayoutProps => {
+         if(props.getHighlightCardHeight){
+            props.getHighlightCardHeight(onLayoutProps.nativeEvent.layout.height);
+         }
+      }}>
          <Header>
             <Title type={props.type}>{props.title}</Title>
 
