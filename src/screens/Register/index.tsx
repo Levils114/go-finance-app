@@ -25,6 +25,7 @@ import {Container,
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
+import { useAuth } from '../../hooks/auth';
 
 interface FormData{
    name: string;
@@ -43,6 +44,7 @@ const schema = Yup.object().shape({
 
 export default function Register(){
    const navigation = useNavigation();
+   const { user } = useAuth();
 
    const { control, handleSubmit, reset, formState: { errors } } = useForm({
       resolver: yupResolver(schema),
@@ -70,7 +72,7 @@ export default function Register(){
       }
 
       try{
-         const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
+         const transactions = await AsyncStorage.getItem(`@GoFinance:transactions_user:${user.id}`);
          const formatTransactions = transactions ? JSON.parse(transactions) : [];
 
          await AsyncStorage.setItem('@GoFinance:transactions', JSON.stringify([...formatTransactions, data]));

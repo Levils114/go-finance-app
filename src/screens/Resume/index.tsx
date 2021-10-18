@@ -25,6 +25,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
 import { addMonths, subMonths, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAuth } from '../../hooks/auth';
 
 interface TotalByCategory{
    name: string;
@@ -38,6 +39,7 @@ interface TotalByCategory{
 
 export default function Resume(){
    const { colors } = useTheme();
+   const { user } = useAuth();
 
    const [loadingTransactions, setLoadingTransactions] = React.useState(true);
    const [selectedDate, setSelectedDate] = React.useState(new Date());
@@ -59,7 +61,7 @@ export default function Resume(){
 
    async function loadData(){
       try{
-         const transactions = await AsyncStorage.getItem('@GoFinance:transactions');
+         const transactions = await AsyncStorage.getItem(`@GoFinance:transactions_user:${user.id}`);
          const currentTransactions = transactions ? JSON.parse(transactions) : [];
 
          const expensives: TranscationCardProps[] = currentTransactions

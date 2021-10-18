@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -13,8 +13,10 @@ interface User{
 
 interface AuthContextProps{
    user: User;
+   loadingUserData: boolean;
    signInWithGoogle(): Promise<void>;
    signInWithApple(): Promise<void>;
+   signOut(): Promise<void>;
 }
 
 interface AuthorizationResponse{
@@ -31,6 +33,27 @@ const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider: React.FC = ({ children }) => {
    const [user, setUser] = useState({} as User);
+   const [loadingUserData, setLoadingUserData] = useState(true);
+
+   useEffect(() => {
+      async function loadUserData(){
+         try{
+            const userData = await AsyncStorage.getItem('@GoFinance:User');
+
+            if(userData){
+               const userDataParsed = JSON.parse(userData);
+
+               setUser(userDataParsed);
+            }
+         } catch(err){
+            console.log(err);
+         } finally{
+            setLoadingUserData(false);
+         }
+      }
+
+      loadUserData();
+   }, []);
 
    async function signInWithGoogle(): Promise<void>{
       try{
@@ -64,7 +87,7 @@ export const AuthProvider: React.FC = ({ children }) => {
                name: credential.fullName?.givenName!,
                email: credential.email!,
                id: credential.user,
-               picture: undefined,
+               picture: `https://ui-avatars.com/api/?name=${credential.fullName?.givenName!}&length=1`,
             }
 
             setUser(user);
@@ -75,8 +98,17 @@ export const AuthProvider: React.FC = ({ children }) => {
       }
    }
 
+   async function signOut(): Promise<void>{
+      try{
+         setUser({} as User);
+         await AsyncStorage.removeItem('@GoFinance:User');
+      } catch(err){
+         throw new Error(err as never);
+      }
+   }
+
    return(
-      <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+      <AuthContext.Provider value={{ user, loadingUserData, signInWithGoogle, signInWithApple, signOut }}>
          {children}
       </AuthContext.Provider>
    );
