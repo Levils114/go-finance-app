@@ -2,10 +2,12 @@ import React from "react";
 import { TextInputProps } from 'react-native';
 import { Container } from "./styles";
 
-export default function Input(props: TextInputProps){
+interface InputProps extends TextInputProps{
+   active?: boolean;
+}
+
+export default function Input({ active = false, ...props}: InputProps){
    return(
-      <Container {...props}>
-         
-      </Container>
+      <Container active={active} {...props}/>
    );
 }
