@@ -134,6 +134,7 @@ export default function Register(){
 
                {errors.category && <Error>{errors.category.message}</Error>}
                <CategorySelectButton 
+                  testID='OpenCategoryModalButtonID'
                   activeOpacity={0.7} 
                   onPress={() => setCategoryModalOpen(true)} 
                   category={category.name ? category.name : "Categoria"} 
@@ -143,7 +144,7 @@ export default function Register(){
             <Button title="Enviar" onPress={handleSubmit(handleRegister)}/>
          </Form>
 
-         <Modal visible={categoryModalOpen} animationType="slide">
+         <Modal testID='CategoriesModalID' visible={categoryModalOpen} animationType="slide">
             <CategorySelect 
                category={category}
                setCategory={(category) => setCategory(category)}
